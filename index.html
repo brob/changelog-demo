@@ -8,5 +8,12 @@
 </head>
 <body>
     <h1>Hello world</h1>
+    <h2>Releases</h2>
+    <ul>
+        {% for release in releases %}
+        
+        <li><a href="{{release.slug}}">{{ release.title }}</a></li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
