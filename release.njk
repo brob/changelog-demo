@@ -1,0 +1,29 @@
+---
+pagination:
+  data: releases
+  size: 1
+  alias: release
+permalink: releases/{{ release.slug }}/
+
+---
+
+<h1>{{ release.title }}</h1>
+
+
+
+{{ release.body | markdown | safe }}
+
+{% for pr in release.pullRequestData.nodes %}
+<div class="pr">
+  <h3><a href="{{ pr.url }}">{{ pr.title }}</a>
+    <h3>
+      <h4>(+{{pr.additions}}, -{{pr.deletions}} from {{pr.commits.totalCount}} Commits)</h4>
+      <p>{{ pr.bodyText}}</p>
+      <h5>Commits</h5>
+      <ul>
+        {% for commit in pr.commits.nodes %}
+        <li>By {{ commit.commit.author.name }} - <a href="{{ commit.url }}">{{ commit.commit.messageHeadline }} - {{ commit.commit.messageBody }}</a></li>
+        {% endfor %}
+
+</div>
+{% endfor %}
