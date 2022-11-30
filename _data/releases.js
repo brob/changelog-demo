@@ -1,12 +1,10 @@
-const { GraphQLClient, gql } = require('graphql-request');
+const EleventyFetch = require("@11ty/eleventy-fetch");
+
 require('dotenv').config();
 
 module.exports = async () => {
-    const client = new GraphQLClient(
-      `${process.env.HYGRAPH_ENDPOINT}`
-    );
-  
-    const query = gql`
+
+    const query = `
     query Releases {
         releases {
             body
@@ -42,8 +40,21 @@ module.exports = async () => {
           }
       }
     `;
-  
-    const { releases } = await client.request(query);
-  
-    return releases;
+    try {
+      const { data } = await EleventyFetch(process.env.HYGRAPH_ENDPOINT, {
+        
+        fetchOptions: {
+          body: JSON.stringify({ query }),
+          method: "POST",
+        },
+        duration: '5m',
+        type: 'json',
+        verbose: true 
+      })
+
+      return data.releases;
+    } catch (error) {
+      console.log(error);
+    }
+
   };
